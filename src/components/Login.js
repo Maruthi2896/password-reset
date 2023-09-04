@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Card, Input, TextField, Button } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import CloudDoneIcon from "@mui/icons-material/CloudDone";
 import { useContext } from "react";
 import axios from "axios";
@@ -13,6 +13,8 @@ function Login() {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const [valid, setValid] = useState(false);
+  const navigate = useNavigate();
+
   const submitNow = () => {
     let data = {
       email: email,
@@ -20,9 +22,10 @@ function Login() {
     };
     try {
       axios.post(`http://localhost:5000/login`, data).then((res) => {
-        console.log("response:after login", res);
         if (res.status === 200) {
           alert(res.data.message);
+          window.localStorage.setItem("token", res.data.token);
+          navigate("/main");
         } else {
           alert(res.data.message);
         }
@@ -30,7 +33,6 @@ function Login() {
     } catch (err) {
       alert(err.message);
     }
-
     setEmail("");
     setValid(false);
     setPass("");
@@ -40,7 +42,6 @@ function Login() {
       axios.get(`http://localhost:5000/mail-check`, email).then((res) => {
         let mail = [];
         mail = res.data.filter((ele) => ele.email === email);
-        console.log(mail);
         if (mail.length === 0) {
           setDbvalue(false);
         } else {
@@ -109,7 +110,7 @@ function Login() {
           </a>
         </div>
         <Button variant="contained" onClick={() => submitNow()}>
-          <Link to={valid ? "/main" : "/"}>Login</Link>
+          Login
         </Button>
         {email === "" ? (
           <></>

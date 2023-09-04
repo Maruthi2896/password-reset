@@ -24,6 +24,8 @@ function NewPassword() {
     } catch (error) {
       console.log(error);
     }
+    setPass("");
+    setConfirmPass("");
   };
   return (
     <div style={{ display: "flex", justifyContent: "center", margin: "20px" }}>
@@ -68,7 +70,7 @@ function NewPassword() {
           passvalid ? (
             <></>
           ) : (
-            <p>Password Mismatch</p>
+            <p style={{ color: "red" }}>Password Mismatch</p>
           )
         ) : (
           <></>
